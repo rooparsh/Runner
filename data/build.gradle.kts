@@ -44,8 +44,8 @@ android {
 dependencies {
     implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
 
-    implementation("androidx.room:room-runtime:2.4.1")
-    implementation("androidx.room:room-ktx:2.4.1")
+    api("androidx.room:room-runtime:2.4.1")
+    api("androidx.room:room-ktx:2.4.1")
     ksp("androidx.room:room-compiler:2.4.1")
 
 

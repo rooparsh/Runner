@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("dagger.hilt.android.plugin")
+    kotlin("kapt")
 }
 
 android {
@@ -42,16 +44,22 @@ android {
 }
 
 dependencies {
+
+
+    implementation(project(":data"))
+
+    implementation("com.google.dagger:hilt-android:2.40.5")
+    kapt("com.google.dagger:hilt-compiler:2.40.5")
+
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.compose.ui:ui:1.2.0-alpha02")
     implementation("androidx.compose.material:material:1.2.0-alpha02")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha01")
+    implementation("androidx.lifecycle:lifecycle-service:2.5.0-alpha01")
     implementation("androidx.activity:activity-compose:1.4.0")
 
-    implementation("androidx.fragment:fragment:1.4.1")
-
-
+    api("com.google.maps.android:maps-compose:1.0.0")
     api("com.google.android.gms:play-services-maps:18.0.2")
     api("com.google.android.gms:play-services-location:19.0.1")
 

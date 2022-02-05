@@ -1,69 +1,60 @@
 package com.darklabs.location.component
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.core.content.ContextCompat
 import com.darklabs.location.R
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.darklabs.location.util.getMarkerIconFromDrawable
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 
 /**
  * Created by Rooparsh Kalia on 31/01/22
  */
 
-
 @Composable
-fun MapView(onMapReady: (GoogleMap) -> Unit) {
-    val map = rememberMapViewWithLifecycle()
-
-    AndroidView(factory = { map }) { mapView ->
-        CoroutineScope(Dispatchers.Main).launch {
-            mapView.getMapAsync(onMapReady)
-        }
+fun Map(
+    modifier: Modifier = Modifier,
+    mapProperties: MapProperties = MapProperties(),
+    uiSettings: MapUiSettings = MapUiSettings(),
+    location: LatLng,
+    zoomLevel: Float = 11f,
+    onMapLoaded: () -> Unit = {}
+) {
+    val cameraPositionState = rememberCameraPositionState()
+    LaunchedEffect(location) {
+        cameraPositionState.animate(
+            CameraUpdateFactory.newCameraPosition(
+                CameraPosition.fromLatLngZoom(
+                    location,
+                    zoomLevel
+                )
+            )
+        )
     }
-}
 
-@Composable
-fun rememberMapViewWithLifecycle(): MapView {
-    val context = LocalContext.current
-    val mapView = remember {
-        MapView(context).apply {
-            id = R.id.map
-        }
-    }
-    val lifecycleObserver = rememberMapLifecycleObserver(mapView = mapView)
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-
-    DisposableEffect(lifecycle) {
-        lifecycle.addObserver(lifecycleObserver)
-        onDispose {
-            lifecycle.removeObserver(lifecycleObserver)
-        }
-    }
-    return mapView
-}
-
-
-@Composable
-fun rememberMapLifecycleObserver(mapView: MapView) = remember(mapView) {
-    LifecycleEventObserver { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
-            Lifecycle.Event.ON_START -> mapView.onStart()
-            Lifecycle.Event.ON_RESUME -> mapView.onResume()
-            Lifecycle.Event.ON_PAUSE -> mapView.onPause()
-            Lifecycle.Event.ON_STOP -> mapView.onStop()
-            Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
-            else -> throw IllegalStateException()
-        }
+    GoogleMap(
+        modifier = modifier,
+        cameraPositionState = cameraPositionState,
+        properties = mapProperties,
+        uiSettings = uiSettings,
+        onMapLoaded = onMapLoaded,
+        googleMapOptionsFactory = {
+            GoogleMapOptions().camera(cameraPositionState.position)
+        }) {
+        Marker(
+            position = cameraPositionState.position.target,
+            title = "My current Location",
+            icon = getMarkerIconFromDrawable(
+                ContextCompat.getDrawable(
+                    LocalContext.current, R.drawable.ic_runner
+                )!!
+            )
+        )
     }
 }

@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    kotlin("kapt")
 }
 
 android {
@@ -47,13 +49,19 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":location"))
+    implementation(project(":data"))
+
+
+    // Dagger Core
+    implementation("com.google.dagger:hilt-android:2.40.5")
+    kapt("com.google.dagger:hilt-compiler:2.40.5")
 
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.compose.ui:ui:1.2.0-alpha02")
     implementation("androidx.compose.material:material:1.2.0-alpha02")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
     implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha01")
 
     testImplementation("junit:junit:4.13.2")
 
