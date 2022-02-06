@@ -22,7 +22,8 @@ class LocationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createRun(): Long {
-        return runDao.createNewRun()
+        val currentTimeInMillis = System.currentTimeMillis()
+        return runDao.createNewRun(Run(timeInMillis = currentTimeInMillis))
     }
 
     override suspend fun getOngoingRun(): Run? {

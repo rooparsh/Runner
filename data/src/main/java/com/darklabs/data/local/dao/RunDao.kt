@@ -57,9 +57,9 @@ interface RunDao {
     suspend fun updateRun(run: Run)
 
     @Transaction
-    suspend fun createNewRun(): Long {
+    suspend fun createNewRun(run: Run): Long {
         stopPreviousRuns()
-        return insertRun(Run(isRunning = true))
+        return insertRun(run.copy(isRunning = true))
     }
 
     @Transaction

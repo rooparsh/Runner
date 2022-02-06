@@ -31,6 +31,7 @@ import javax.inject.Inject
 class LocationService : LifecycleService() {
 
     companion object {
+        const val SMALLEST_DISPLACEMENT = 50f
         const val LOCATION_UPDATE_INTERVAL = 1000L
         const val FASTEST_LOCATION_INTERVAL = 1000L
     }
@@ -63,6 +64,7 @@ class LocationService : LifecycleService() {
     }
 
     private val locationRequest = LocationRequest.create().apply {
+        smallestDisplacement = SMALLEST_DISPLACEMENT
         interval = LOCATION_UPDATE_INTERVAL
         fastestInterval = FASTEST_LOCATION_INTERVAL
         priority = PRIORITY_HIGH_ACCURACY

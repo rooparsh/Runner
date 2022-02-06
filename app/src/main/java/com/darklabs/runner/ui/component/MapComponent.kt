@@ -21,15 +21,17 @@ import com.google.maps.android.compose.MapUiSettings
 fun MapComponent(modifier: Modifier = Modifier, viewModel: MainViewModel) {
 
     val currentLocation by viewModel.currentLocationFlow.collectAsState(initial = defaultLocation)
-
+    val path by viewModel.pathFlow.collectAsState(initial = null)
     Map(
         modifier = modifier,
+        startLatLong = path?.firstOrNull(),
         currentLatLong = currentLocation,
         mapProperties = MapProperties(
-            mapType = MapType.NORMAL,
-            isMyLocationEnabled = true
+            mapType = MapType.NORMAL
         ),
+        route = path,
         uiSettings = MapUiSettings(
+            zoomControlsEnabled = false,
             compassEnabled = true,
             myLocationButtonEnabled = true
         )

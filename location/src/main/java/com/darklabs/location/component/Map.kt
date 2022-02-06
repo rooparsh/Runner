@@ -3,6 +3,7 @@ package com.darklabs.location.component
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.darklabs.location.R
@@ -25,7 +26,7 @@ fun Map(
     startLatLong: LatLng? = null,
     currentLatLong: LatLng? = null,
     route: List<LatLng>? = null,
-    zoomLevel: Float = 11f,
+    zoomLevel: Float = 15f,
     onMapLoaded: () -> Unit = {}
 ) {
     val currentCameraPositionState = rememberCameraPositionState()
@@ -61,26 +62,28 @@ fun Map(
 
         startLatLong?.let {
             Marker(
-                position = startingCameraPositionState!!.position.target,
+                position = it,
                 title = "My starting position",
                 icon = getMarkerIconFromDrawable(
                     ContextCompat.getDrawable(
-                        LocalContext.current, R.drawable.ic_runner
-                    )!!
+                        LocalContext.current, R.drawable.ic_location
+                    )?.apply { setTint(android.graphics.Color.GREEN) }!!
                 )
             )
         }
-        Marker(
-            position = currentCameraPositionState.position.target,
-            title = "My current position",
-            icon = getMarkerIconFromDrawable(
-                ContextCompat.getDrawable(
-                    LocalContext.current, R.drawable.ic_runner
-                )!!
+        currentLatLong?.let {
+            Marker(
+                position = it,
+                title = "My current position",
+                icon = getMarkerIconFromDrawable(
+                    ContextCompat.getDrawable(
+                        LocalContext.current, R.drawable.ic_runner
+                    )?.apply { setTint(android.graphics.Color.RED) }!!
+                )
             )
-        )
+        }
         route?.let {
-            Polyline(points = it)
+            Polyline(points = it, color = Color.Blue)
         }
     }
 }

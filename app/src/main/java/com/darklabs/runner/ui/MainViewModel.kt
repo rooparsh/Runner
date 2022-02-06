@@ -2,6 +2,8 @@ package com.darklabs.runner.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.darklabs.data.local.entity.Location
+import com.darklabs.data.local.entity.RunWithLocation
 import com.darklabs.domain.repository.LocationRepository
 import com.darklabs.runner.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
@@ -23,23 +25,54 @@ class MainViewModel @Inject constructor(
     private var _latestLocationFlow = MutableStateFlow(defaultLocation)
     val currentLocationFlow: StateFlow<LatLng> = _latestLocationFlow
 
+    private var _pathFlow = MutableStateFlow<List<LatLng>>(emptyList())
+    val pathFlow: StateFlow<List<LatLng>> = _pathFlow
+
 
     init {
-        fetchOngoingRunWithLocation()
+        fetchLatestLocation()
+        fetchOnGoingRunPath()
     }
 
-    private fun fetchOngoingRunWithLocation() {
+    private fun fetchOnGoingRun(): Flow<RunWithLocation> {
+        return locationRepository
+            .getOngoingRunWithLocation()
+            .filterNotNull()
+    }
+
+    private fun fetchOnGoingRunLocations(): Flow<List<Location>> {
+        return fetchOnGoingRun()
+            .map { data -> data.locations }
+            .filter { it.isNotEmpty() }
+    }
+
+    private fun fetchLatestLocation() {
         viewModelScope.launch(Dispatchers.IO) {
-            locationRepository.getOngoingRunWithLocation()
-                .filterNotNull()
-                .map { data -> data.locations.sortedByDescending { it.timestamp } }
-                .filter { it.isNotEmpty() }
-                .map { listOfLocations -> listOfLocations[0] }
+            fetchOnGoingRunLocations()
+                .map { listOfLocations -> listOfLocations.last() }
+                .distinctUntilChanged()
                 .map { location ->
                     LatLng(location.latitude, location.longitude)
                 }
                 .collect {
                     _latestLocationFlow.value = it
+                }
+        }
+    }
+
+    private fun fetchOnGoingRunPath() {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchOnGoingRunLocations()
+                .map { locations ->
+                    locations.map { location ->
+                        LatLng(
+                            location.latitude,
+                            location.longitude
+                        )
+                    }
+                }
+                .collect {
+                    _pathFlow.value = it
                 }
         }
     }
