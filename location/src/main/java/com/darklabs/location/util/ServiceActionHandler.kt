@@ -9,13 +9,13 @@ import com.darklabs.location.service.LocationService
  */
 
 enum class Action(val stringAction: String) {
-    ACTION_START_SERVICE("ACTION_START_SERVICE"),
+    ACTION_START_RESUME_SERVICE("ACTION_START_RESUME_SERVICE"),
     ACTION_STOP_SERVICE("ACTION_STOP_SERVICE"),
     ACTION_PAUSE_SERVICE("ACTION_PAUSE_SERVICE");
 
     companion object {
-        fun findActionFromString(action: String?): Action? {
-            return values().find { action == it.stringAction }
+        fun findActionFromString(action: String?): Action {
+            return values().find { action == it.stringAction } ?: ACTION_STOP_SERVICE
         }
     }
 }

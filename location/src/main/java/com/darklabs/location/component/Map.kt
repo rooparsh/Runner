@@ -22,39 +22,65 @@ fun Map(
     modifier: Modifier = Modifier,
     mapProperties: MapProperties = MapProperties(),
     uiSettings: MapUiSettings = MapUiSettings(),
-    location: LatLng,
+    startLatLong: LatLng? = null,
+    currentLatLong: LatLng? = null,
+    route: List<LatLng>? = null,
     zoomLevel: Float = 11f,
     onMapLoaded: () -> Unit = {}
 ) {
-    val cameraPositionState = rememberCameraPositionState()
-    LaunchedEffect(location) {
-        cameraPositionState.animate(
-            CameraUpdateFactory.newCameraPosition(
-                CameraPosition.fromLatLngZoom(
-                    location,
-                    zoomLevel
+    val currentCameraPositionState = rememberCameraPositionState()
+
+    val startingCameraPositionState = startLatLong?.let {
+        rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(startLatLong, zoomLevel)
+        }
+    }
+
+    LaunchedEffect(currentLatLong) {
+        currentLatLong?.let { safeCurrentLatLong ->
+            currentCameraPositionState.animate(
+                CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.fromLatLngZoom(
+                        safeCurrentLatLong,
+                        zoomLevel
+                    )
                 )
             )
-        )
+        }
     }
 
     GoogleMap(
         modifier = modifier,
-        cameraPositionState = cameraPositionState,
+        cameraPositionState = currentCameraPositionState,
         properties = mapProperties,
         uiSettings = uiSettings,
         onMapLoaded = onMapLoaded,
         googleMapOptionsFactory = {
-            GoogleMapOptions().camera(cameraPositionState.position)
+            GoogleMapOptions().camera(currentCameraPositionState.position)
         }) {
+
+        startLatLong?.let {
+            Marker(
+                position = startingCameraPositionState!!.position.target,
+                title = "My starting position",
+                icon = getMarkerIconFromDrawable(
+                    ContextCompat.getDrawable(
+                        LocalContext.current, R.drawable.ic_runner
+                    )!!
+                )
+            )
+        }
         Marker(
-            position = cameraPositionState.position.target,
-            title = "My current Location",
+            position = currentCameraPositionState.position.target,
+            title = "My current position",
             icon = getMarkerIconFromDrawable(
                 ContextCompat.getDrawable(
                     LocalContext.current, R.drawable.ic_runner
                 )!!
             )
         )
+        route?.let {
+            Polyline(points = it)
+        }
     }
 }

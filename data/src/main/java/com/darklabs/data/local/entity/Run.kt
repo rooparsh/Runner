@@ -7,15 +7,15 @@ import androidx.room.PrimaryKey
 /**
  * Created by Rooparsh Kalia on 31/01/22
  */
-@Entity(tableName = "running")
+@Entity(tableName = "run")
 data class Run(
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0L,
     var img: Bitmap? = null,
     var timestamp: Long = 0L,
     var avgSpeedInKMH: Float = 0f,
     var distanceInMeters: Int = 0,
     var timeInMillis: Long = 0L,
-    var caloriesBurned: Int = 0
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
-}
+    var caloriesBurned: Int = 0,
+    var isRunning: Boolean = false
+)

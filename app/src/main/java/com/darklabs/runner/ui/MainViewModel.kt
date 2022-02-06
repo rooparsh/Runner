@@ -1,12 +1,14 @@
 package com.darklabs.runner.ui
 
 import androidx.lifecycle.ViewModel
-import com.darklabs.data.local.dao.LocationDao
+import androidx.lifecycle.viewModelScope
+import com.darklabs.domain.repository.LocationRepository
+import com.darklabs.runner.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -14,8 +16,31 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MainViewModel @Inject constructor(locationDao: LocationDao) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val locationRepository: LocationRepository
+) : ViewModel() {
 
-    val locationStateFlow: Flow<LatLng> =
-        locationDao.getLocation().filterNotNull().map { LatLng(it.latitude, it.longitude) }
+    private var _latestLocationFlow = MutableStateFlow(defaultLocation)
+    val currentLocationFlow: StateFlow<LatLng> = _latestLocationFlow
+
+
+    init {
+        fetchOngoingRunWithLocation()
+    }
+
+    private fun fetchOngoingRunWithLocation() {
+        viewModelScope.launch(Dispatchers.IO) {
+            locationRepository.getOngoingRunWithLocation()
+                .filterNotNull()
+                .map { data -> data.locations.sortedByDescending { it.timestamp } }
+                .filter { it.isNotEmpty() }
+                .map { listOfLocations -> listOfLocations[0] }
+                .map { location ->
+                    LatLng(location.latitude, location.longitude)
+                }
+                .collect {
+                    _latestLocationFlow.value = it
+                }
+        }
+    }
 }

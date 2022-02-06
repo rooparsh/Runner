@@ -49,7 +49,7 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":location"))
-    implementation(project(":data"))
+    implementation(project(":domain"))
 
 
     // Dagger Core

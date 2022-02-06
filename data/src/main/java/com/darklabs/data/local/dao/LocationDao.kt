@@ -19,8 +19,11 @@ interface LocationDao {
     @Query("DELETE from location")
     suspend fun clearTable()
 
+    @Query("SELECT * FROM location WHERE runId = :runId ORDER BY id DESC LIMIT 1")
+    fun getLatestLocation(runId: Long): Flow<Location>
+
     @Query("SELECT * FROM location")
-    fun getLocation(): Flow<Location>
+    fun getAllLocations(): Flow<List<Location>>
 
     @Transaction
     suspend fun clearAndInsertLocation(location: Location) {

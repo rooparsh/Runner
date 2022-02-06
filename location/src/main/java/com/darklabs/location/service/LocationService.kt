@@ -2,15 +2,13 @@ package com.darklabs.location.service
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.darklabs.data.local.dao.LocationDao
+import com.darklabs.domain.repository.LocationRepository
 import com.darklabs.location.notification.NOTIFICATION_ID
 import com.darklabs.location.notification.buildNotification
 import com.darklabs.location.notification.createNotificationChannel
@@ -28,32 +26,35 @@ import javax.inject.Inject
  * Created by Rooparsh Kalia on 04/02/22
  */
 
-typealias LocationEntity = com.darklabs.data.local.entity.Location
 
 @AndroidEntryPoint
 class LocationService : LifecycleService() {
-
-
-    @Inject
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    @Inject
-    lateinit var locationDao: LocationDao
 
     companion object {
         const val LOCATION_UPDATE_INTERVAL = 1000L
         const val FASTEST_LOCATION_INTERVAL = 1000L
     }
 
-    private var _isTracking: Boolean = false
+    @Inject
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var locationRepository: LocationRepository
+
+    private var isTracking: Boolean = false
     private var isFirstRun = true
+
+    private var runId = -1L
 
 
     private val locationCallback = object : LocationCallback() {
 
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
-            if (_isTracking) {
+            if (isTracking) {
                 result.locations.forEach { addPathPoint(it) }
             }
 
@@ -69,16 +70,13 @@ class LocationService : LifecycleService() {
 
 
     private fun startForegroundService() {
-        _isTracking = true
-        updateTrackingLocation(_isTracking, true)
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        isTracking = true
 
+        updateTrackingLocation(isTracking)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
         }
-
 
         startForeground(
             NOTIFICATION_ID,
@@ -89,18 +87,16 @@ class LocationService : LifecycleService() {
     private fun addPathPoint(location: Location?) {
         location?.let {
             lifecycleScope.launch {
-                locationDao.clearAndInsertLocation(
-                    LocationEntity(it.latitude, it.longitude)
-                )
-            }
+                locationRepository.insertLocation(runId, it.latitude, it.longitude)
 
+            }
         }
     }
 
 
     @SuppressLint("MissingPermission")
-    fun updateTrackingLocation(isTracking: Boolean, isLocationPermissionGranted: Boolean) {
-        if (isTracking && isLocationPermissionGranted) {
+    fun updateTrackingLocation(isTracking: Boolean) {
+        if (isTracking) {
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,
                 locationCallback,
@@ -114,18 +110,46 @@ class LocationService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (Action.findActionFromString(it.action)) {
-                Action.ACTION_START_SERVICE -> {
+                Action.ACTION_START_RESUME_SERVICE -> {
                     if (isFirstRun) {
+                        createRunInDB()
                         startForegroundService()
                     } else {
-                        Log.d("LocationService:", "service resume ")
+                        resumeCurrentRun()
                     }
                 }
-                Action.ACTION_STOP_SERVICE -> TODO()
-                Action.ACTION_PAUSE_SERVICE -> TODO()
-                null -> {}
+                Action.ACTION_STOP_SERVICE -> {
+                    stopCurrentRun()
+                    updateTrackingLocation(false)
+                    this.stopSelf()
+                }
+                Action.ACTION_PAUSE_SERVICE -> {
+                    stopCurrentRun()
+                    updateTrackingLocation(false)
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun stopCurrentRun() {
+        isFirstRun = false
+        updateRunStatus(false)
+    }
+
+    private fun createRunInDB() {
+        lifecycleScope.launch {
+            runId = locationRepository.createRun()
+        }
+    }
+
+    private fun resumeCurrentRun() {
+        updateRunStatus(true)
+    }
+
+    private fun updateRunStatus(isRunning: Boolean) {
+        lifecycleScope.launch {
+            locationRepository.updateRunStatus(runId, isRunning)
+        }
     }
 }
