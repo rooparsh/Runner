@@ -47,6 +47,7 @@ dependencies {
 
 
     implementation(project(":domain"))
+    implementation(project(":navigation"))
 
     implementation("com.google.dagger:hilt-android:2.40.5")
     kapt("com.google.dagger:hilt-compiler:2.40.5")

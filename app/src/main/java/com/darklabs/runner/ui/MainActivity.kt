@@ -4,26 +4,30 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
-import com.darklabs.runner.ui.screen.TrackingScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.darklabs.navigation.NavigationManager
+import com.darklabs.runner.ui.navigation.NavigationController
 import com.darklabs.runner.ui.theme.RunnerTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @ExperimentalAnimationApi
 @ExperimentalPermissionsApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val viewModel by viewModels<MainViewModel>()
-
     @SuppressLint("MissingPermission")
+
+    @Inject
+    lateinit var navigationManager: NavigationManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             RunnerTheme {
-                TrackingScreen(viewModel = viewModel)
+                NavigationController(navigationManager = navigationManager)
             }
         }
     }

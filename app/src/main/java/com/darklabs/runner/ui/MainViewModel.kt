@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.darklabs.data.local.entity.Location
 import com.darklabs.data.local.entity.RunWithLocation
 import com.darklabs.domain.repository.LocationRepository
+import com.darklabs.navigation.NavigationManager
 import com.darklabs.runner.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val navigationManager: NavigationManager
 ) : ViewModel() {
 
     private var _latestLocationFlow = MutableStateFlow(defaultLocation)

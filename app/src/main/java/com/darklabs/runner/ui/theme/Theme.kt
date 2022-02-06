@@ -1,44 +1,31 @@
 package com.darklabs.runner.ui.theme
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
-)
+private val LightColorScheme = lightColorScheme()
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
-)
+private val DarkColorScheme = darkColorScheme()
 
 @Composable
-fun RunnerTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
+fun RunnerTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicTheme: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+    content: @Composable () -> Unit
+) {
+    val colorsScheme = if (dynamicTheme) {
+        val context = LocalContext.current
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else {
-        LightColorPalette
+        if (darkTheme) DarkColorScheme else LightColorScheme
     }
 
     MaterialTheme(
-        colors = colors,
+        colorScheme = colorsScheme,
         typography = Typography,
-        shapes = Shapes,
         content = content
     )
 }
