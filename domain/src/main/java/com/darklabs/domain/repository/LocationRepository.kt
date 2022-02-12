@@ -1,8 +1,8 @@
 package com.darklabs.domain.repository
 
-import com.darklabs.data.local.entity.Location
-import com.darklabs.data.local.entity.Run
-import com.darklabs.data.local.entity.RunWithLocation
+import com.darklabs.domain.model.Location
+import com.darklabs.domain.model.Run
+import com.darklabs.domain.model.RunWithLocation
 import kotlinx.coroutines.flow.Flow
 
 /**

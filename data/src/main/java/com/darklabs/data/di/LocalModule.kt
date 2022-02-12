@@ -1,4 +1,4 @@
-package com.darklabs.runner.di
+package com.darklabs.data.di
 
 import android.content.Context
 import com.darklabs.data.local.DatabaseHelper
@@ -10,11 +10,11 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * Created by Rooparsh Kalia on 05/02/22
+ * Created by Rooparsh Kalia on 12/02/22
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object LocalModule {
+internal object LocalModule {
 
     @Provides
     @Singleton

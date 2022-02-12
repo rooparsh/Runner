@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":location"))
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(project(":navigation"))
 
 

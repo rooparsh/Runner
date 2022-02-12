@@ -1,9 +1,9 @@
-package com.darklabs.runner.di
+package com.darklabs.data.di
 
 import com.darklabs.data.local.dao.LocationDao
 import com.darklabs.data.local.dao.RunDao
+import com.darklabs.data.repository.LocationRepositoryImpl
 import com.darklabs.domain.repository.LocationRepository
-import com.darklabs.domain.repository.LocationRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,11 +11,12 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * Created by Rooparsh Kalia on 05/02/22
+ * Created by Rooparsh Kalia on 12/02/22
  */
+
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+internal object RepositoryModule {
 
     @Provides
     @Singleton

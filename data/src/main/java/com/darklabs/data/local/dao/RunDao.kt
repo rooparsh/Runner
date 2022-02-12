@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
  * Created by Rooparsh Kalia on 31/01/22
  */
 @Dao
-interface RunDao {
+internal interface RunDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRun(run: Run): Long

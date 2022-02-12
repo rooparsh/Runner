@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
  * Created by Rooparsh Kalia on 31/01/22
  */
 @Entity(tableName = "run")
-data class Run(
+internal data class Run(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L,
     var img: Bitmap? = null,

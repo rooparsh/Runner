@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    kotlin("kapt")
 }
 
 android {
@@ -36,10 +37,16 @@ android {
 }
 
 dependencies {
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
 
-    api("androidx.room:room-runtime:2.4.1")
-    api("androidx.room:room-ktx:2.4.1")
+    implementation(project(":domain"))
+
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
+    
+    implementation("com.google.dagger:hilt-android:2.40.5")
+    kapt("com.google.dagger:hilt-compiler:2.40.5")
+
+    implementation("androidx.room:room-runtime:2.4.1")
+    implementation("androidx.room:room-ktx:2.4.1")
     ksp("androidx.room:room-compiler:2.4.1")
 
 

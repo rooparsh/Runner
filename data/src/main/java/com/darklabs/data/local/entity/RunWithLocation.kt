@@ -6,7 +6,7 @@ import androidx.room.Relation
 /**
  * Created by Rooparsh Kalia on 06/02/22
  */
-data class RunWithLocation(
+internal data class RunWithLocation(
     @Embedded val run: Run,
     @Relation(
         parentColumn = "id",

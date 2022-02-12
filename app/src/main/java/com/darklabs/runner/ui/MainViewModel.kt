@@ -2,8 +2,8 @@ package com.darklabs.runner.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.darklabs.data.local.entity.Location
-import com.darklabs.data.local.entity.RunWithLocation
+import com.darklabs.domain.model.Location
+import com.darklabs.domain.model.RunWithLocation
 import com.darklabs.domain.repository.LocationRepository
 import com.darklabs.navigation.NavigationManager
 import com.darklabs.runner.util.defaultLocation

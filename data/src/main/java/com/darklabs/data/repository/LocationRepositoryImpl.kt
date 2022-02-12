@@ -1,18 +1,27 @@
-package com.darklabs.domain.repository
+package com.darklabs.data.repository
+
 
 import com.darklabs.data.local.dao.LocationDao
 import com.darklabs.data.local.dao.RunDao
 import com.darklabs.data.local.entity.Location
 import com.darklabs.data.local.entity.Run
-import com.darklabs.data.local.entity.RunWithLocation
+import com.darklabs.data.mapper.toUiLocation
+import com.darklabs.data.mapper.toUiRun
+import com.darklabs.data.mapper.toUiRunWithLocation
+import com.darklabs.domain.repository.LocationRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
+import com.darklabs.domain.model.Location as UiLocation
+import com.darklabs.domain.model.Run as UiRun
+import com.darklabs.domain.model.RunWithLocation as UiRunWithLocation
 
 /**
- * Created by Rooparsh Kalia on 06/02/22
+ * Created by Rooparsh Kalia on 12/02/22
  */
 
-class LocationRepositoryImpl @Inject constructor(
+
+internal class LocationRepositoryImpl @Inject constructor(
     private val locationDao: LocationDao,
     private val runDao: RunDao
 ) : LocationRepository {
@@ -26,16 +35,16 @@ class LocationRepositoryImpl @Inject constructor(
         return runDao.createNewRun(Run(timeInMillis = currentTimeInMillis))
     }
 
-    override suspend fun getOngoingRun(): Run? {
-        return runDao.getOngoingRun()
+    override suspend fun getOngoingRun(): UiRun? {
+        return runDao.getOngoingRun()?.toUiRun()
     }
 
-    override fun getLatestLocation(runId: Long): Flow<Location> {
-        return locationDao.getLatestLocation(runId)
+    override fun getLatestLocation(runId: Long): Flow<UiLocation> {
+        return locationDao.getLatestLocation(runId).transform { it.toUiLocation() }
     }
 
-    override fun getOngoingRunWithLocation(): Flow<RunWithLocation?> {
-        return runDao.getOnGoingRunWithLocation()
+    override fun getOngoingRunWithLocation(): Flow<UiRunWithLocation?> {
+        return runDao.getOnGoingRunWithLocation().transform { it?.toUiRunWithLocation() }
     }
 
     override suspend fun insertLocation(runId: Long, latitude: Double, longitude: Double) {
@@ -50,5 +59,4 @@ class LocationRepositoryImpl @Inject constructor(
             )
         )
     }
-
 }

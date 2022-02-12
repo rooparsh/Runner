@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
  * Created by Rooparsh Kalia on 31/01/22
  */
 @Dao
-interface LocationDao {
+internal interface LocationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocation(location: Location)

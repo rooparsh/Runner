@@ -14,7 +14,7 @@ import com.darklabs.data.local.entity.Run
 /**
  * Created by Rooparsh Kalia on 31/01/22
  */
-object DatabaseHelper {
+internal object DatabaseHelper {
 
     @Volatile
     private var INSTANCE: RunningDatabase? = null
