@@ -5,13 +5,14 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.location.Location
 import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.darklabs.domain.repository.LocationRepository
 import com.darklabs.location.location.LocationManager
 import com.darklabs.location.notification.NOTIFICATION_ID
-import com.darklabs.location.notification.buildNotification
 import com.darklabs.location.notification.createNotificationChannel
+import com.darklabs.location.notification.updateNotification
 import com.darklabs.location.util.Action
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +37,9 @@ class LocationService : LifecycleService() {
     @Inject
     lateinit var locationManager: LocationManager
 
+    @Inject
+    lateinit var notificationBuilder: NotificationCompat.Builder
+
     private var isFirstRun = true
 
     private var runId = -1L
@@ -49,7 +53,7 @@ class LocationService : LifecycleService() {
 
         startForeground(
             NOTIFICATION_ID,
-            buildNotification(this).build()
+            notificationBuilder.build()
         )
     }
 
@@ -73,6 +77,7 @@ class LocationService : LifecycleService() {
         intent?.let {
             when (Action.findActionFromString(it.action)) {
                 Action.ACTION_START_RESUME_SERVICE -> {
+                    updateNotification(isRunning = true)
                     if (isFirstRun) {
                         createRunInDB()
                         startForegroundService()
@@ -86,6 +91,7 @@ class LocationService : LifecycleService() {
                     this.stopSelf()
                 }
                 Action.ACTION_PAUSE_SERVICE -> {
+                    updateNotification(isRunning = false)
                     stopCurrentRun()
                     updateTrackingLocation(false)
                 }
@@ -113,5 +119,11 @@ class LocationService : LifecycleService() {
         lifecycleScope.launch {
             locationRepository.updateRunStatus(runId, isRunning)
         }
+    }
+
+    private fun updateNotification(isRunning: Boolean) {
+        notificationBuilder.updateNotification(this, isRunning)
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 }
