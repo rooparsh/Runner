@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.darklabs.navigation.NavigationManager
-import com.darklabs.runner.ui.navigation.NavigationController
+import com.darklabs.runner.navigation.NavigationController
 import com.darklabs.runner.ui.theme.RunnerTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint

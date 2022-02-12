@@ -1,11 +1,11 @@
-package com.darklabs.location.component
+package com.darklabs.location.screen.tracking
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.darklabs.location.screen.tracking.MainViewModel
+import com.darklabs.location.component.Map
 import com.darklabs.location.util.defaultLocation
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -20,7 +20,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @Composable
-fun MapComponent(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+fun MapComponent(modifier: Modifier = Modifier, viewModel: TrackingViewModel) {
 
     val currentLocation by viewModel.currentLocationFlow.collectAsState(initial = defaultLocation)
     val path by viewModel.pathFlow.collectAsState(initial = null)

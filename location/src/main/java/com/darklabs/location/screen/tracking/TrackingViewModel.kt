@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class TrackingViewModel @Inject constructor(
     private val locationRepository: LocationRepository
 ) : ViewModel() {
 

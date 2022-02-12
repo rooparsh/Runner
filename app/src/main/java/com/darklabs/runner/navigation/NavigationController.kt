@@ -1,4 +1,4 @@
-package com.darklabs.runner.ui.navigation
+package com.darklabs.runner.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.darklabs.location.navigation.TrackingCommand
-import com.darklabs.location.screen.TrackingScreen
+import com.darklabs.location.screen.tracking.TrackingScreen
 import com.darklabs.navigation.NavigationManager
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
