@@ -32,7 +32,7 @@ internal class LocationRepositoryImpl @Inject constructor(
 
     override suspend fun createRun(): Long {
         val currentTimeInMillis = System.currentTimeMillis()
-        return runDao.createNewRun(Run(timeInMillis = currentTimeInMillis))
+        return runDao.createNewRun(Run(timestamp = currentTimeInMillis))
     }
 
     override suspend fun getOngoingRun(): UiRun? {

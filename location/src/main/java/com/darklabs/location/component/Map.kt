@@ -31,12 +31,6 @@ fun Map(
 ) {
     val currentCameraPositionState = rememberCameraPositionState()
 
-    val startingCameraPositionState = startLatLong?.let {
-        rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(startLatLong, zoomLevel)
-        }
-    }
-
     LaunchedEffect(currentLatLong) {
         currentLatLong?.let { safeCurrentLatLong ->
             currentCameraPositionState.animate(

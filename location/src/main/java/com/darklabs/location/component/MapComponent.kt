@@ -1,33 +1,37 @@
-package com.darklabs.runner.ui.component
+package com.darklabs.location.component
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.darklabs.location.component.Map
-import com.darklabs.runner.ui.MainViewModel
-import com.darklabs.runner.util.defaultLocation
+import com.darklabs.location.screen.tracking.MainViewModel
+import com.darklabs.location.util.defaultLocation
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
- * Created by Rooparsh Kalia on 05/02/22
+ * Created by Rooparsh Kalia on 12/02/22
  */
 
+
+@ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @Composable
 fun MapComponent(modifier: Modifier = Modifier, viewModel: MainViewModel) {
 
     val currentLocation by viewModel.currentLocationFlow.collectAsState(initial = defaultLocation)
     val path by viewModel.pathFlow.collectAsState(initial = null)
+
     Map(
         modifier = modifier,
         startLatLong = path?.firstOrNull(),
         currentLatLong = currentLocation,
         mapProperties = MapProperties(
-            mapType = MapType.NORMAL
+            mapType = MapType.NORMAL,
+            isMyLocationEnabled = true
         ),
         route = path,
         uiSettings = MapUiSettings(

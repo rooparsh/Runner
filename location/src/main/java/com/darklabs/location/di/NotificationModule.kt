@@ -1,4 +1,4 @@
-package com.darklabs.runner.di
+package com.darklabs.location.di
 
 import android.app.NotificationManager
 import android.content.Context

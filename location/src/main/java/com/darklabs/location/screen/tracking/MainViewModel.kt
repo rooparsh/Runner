@@ -1,15 +1,15 @@
-package com.darklabs.runner.ui
+package com.darklabs.location.screen.tracking
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.darklabs.domain.model.Location
 import com.darklabs.domain.model.RunWithLocation
 import com.darklabs.domain.repository.LocationRepository
-import com.darklabs.navigation.NavigationManager
-import com.darklabs.runner.util.defaultLocation
+import com.darklabs.location.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,10 +18,10 @@ import javax.inject.Inject
  * Created by Rooparsh Kalia on 05/02/22
  */
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val locationRepository: LocationRepository,
-    private val navigationManager: NavigationManager
+    private val locationRepository: LocationRepository
 ) : ViewModel() {
 
     private var _latestLocationFlow = MutableStateFlow(defaultLocation)

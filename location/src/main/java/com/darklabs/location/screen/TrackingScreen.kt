@@ -1,26 +1,26 @@
-package com.darklabs.runner.ui.screen
+package com.darklabs.location.screen
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.darklabs.common.permission.LocationPermissionController
+import com.darklabs.location.component.MapComponent
+import com.darklabs.location.screen.tracking.MainViewModel
 import com.darklabs.location.util.Action
 import com.darklabs.location.util.sendCommandToService
-import com.darklabs.runner.ui.MainViewModel
-import com.darklabs.runner.ui.component.MapComponent
-import com.darklabs.runner.util.defaultLocation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
- * Created by Rooparsh Kalia on 05/02/22
+ * Created by Rooparsh Kalia on 12/02/22
  */
 
+
+@ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @ExperimentalPermissionsApi
 @Composable
@@ -62,10 +62,6 @@ fun TrackingScreen(viewModel: MainViewModel) {
                         Text(text = "STOP")
                     }
                 }
-
-
-                val currentLocation by viewModel.currentLocationFlow.collectAsState(initial = defaultLocation)
-                Text(text = "$currentLocation")
             }
 
         }

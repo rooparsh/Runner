@@ -11,8 +11,10 @@ import com.darklabs.runner.ui.navigation.NavigationController
 import com.darklabs.runner.ui.theme.RunnerTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @ExperimentalPermissionsApi
 @AndroidEntryPoint

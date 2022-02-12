@@ -5,20 +5,17 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.location.Location
 import android.os.Build
-import android.os.Looper
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.darklabs.domain.repository.LocationRepository
+import com.darklabs.location.location.LocationManager
 import com.darklabs.location.notification.NOTIFICATION_ID
 import com.darklabs.location.notification.buildNotification
 import com.darklabs.location.notification.createNotificationChannel
 import com.darklabs.location.util.Action
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.google.android.gms.location.LocationResult
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,18 +23,9 @@ import javax.inject.Inject
  * Created by Rooparsh Kalia on 04/02/22
  */
 
-
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class LocationService : LifecycleService() {
-
-    companion object {
-        const val SMALLEST_DISPLACEMENT = 50f
-        const val LOCATION_UPDATE_INTERVAL = 1000L
-        const val FASTEST_LOCATION_INTERVAL = 1000L
-    }
-
-    @Inject
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -45,36 +33,15 @@ class LocationService : LifecycleService() {
     @Inject
     lateinit var locationRepository: LocationRepository
 
-    private var isTracking: Boolean = false
+    @Inject
+    lateinit var locationManager: LocationManager
+
     private var isFirstRun = true
 
     private var runId = -1L
 
-
-    private val locationCallback = object : LocationCallback() {
-
-        override fun onLocationResult(result: LocationResult) {
-            super.onLocationResult(result)
-            if (isTracking) {
-                result.locations.forEach { addPathPoint(it) }
-            }
-
-        }
-
-    }
-
-    private val locationRequest = LocationRequest.create().apply {
-        smallestDisplacement = SMALLEST_DISPLACEMENT
-        interval = LOCATION_UPDATE_INTERVAL
-        fastestInterval = FASTEST_LOCATION_INTERVAL
-        priority = PRIORITY_HIGH_ACCURACY
-    }
-
-
     private fun startForegroundService() {
-        isTracking = true
-
-        updateTrackingLocation(isTracking)
+        updateTrackingLocation(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
@@ -86,26 +53,19 @@ class LocationService : LifecycleService() {
         )
     }
 
-    private fun addPathPoint(location: Location?) {
-        location?.let {
-            lifecycleScope.launch {
-                locationRepository.insertLocation(runId, it.latitude, it.longitude)
-
-            }
-        }
+    private suspend fun addPathPoint(location: Location) {
+        locationRepository.insertLocation(runId, location.latitude, location.longitude)
     }
 
 
     @SuppressLint("MissingPermission")
     fun updateTrackingLocation(isTracking: Boolean) {
-        if (isTracking) {
-            fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-        } else {
-            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        lifecycleScope.launch(Dispatchers.IO) {
+            locationManager.locationFlow().collect {
+                if (isTracking) {
+                    addPathPoint(it)
+                }
+            }
         }
     }
 
