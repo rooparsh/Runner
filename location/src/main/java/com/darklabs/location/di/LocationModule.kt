@@ -1,7 +1,7 @@
 package com.darklabs.location.di
 
 import android.content.Context
-import com.darklabs.location.location.LocationManager
+import com.darklabs.location.manager.location.LocationManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module

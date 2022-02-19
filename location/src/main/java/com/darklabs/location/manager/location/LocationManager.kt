@@ -1,4 +1,4 @@
-package com.darklabs.location.location
+package com.darklabs.location.manager.location
 
 import android.annotation.SuppressLint
 import android.location.Location
@@ -8,6 +8,8 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -56,6 +58,19 @@ class LocationManager @Inject constructor(
         }
     }
 
+    @SuppressLint("MissingPermission")
+    fun getCurrentLocation(): LatLng? {
+        var currentLocation: LatLng? = null
+        fusedLocationProviderClient
+            .getCurrentLocation(PRIORITY_HIGH_ACCURACY, CancellationTokenSource().token)
+            .addOnSuccessListener {
+                it?.let { safeLoc ->
+                    currentLocation = LatLng(safeLoc.latitude, safeLoc.longitude)
+                }
+            }
+
+        return currentLocation
+    }
 
     @ExperimentalCoroutinesApi
     fun locationFlow(): Flow<Location> = _locationUpdates

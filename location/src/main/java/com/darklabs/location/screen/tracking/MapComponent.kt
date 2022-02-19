@@ -1,15 +1,22 @@
 package com.darklabs.location.screen.tracking
 
+import android.graphics.Color
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.darklabs.location.component.Map
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import com.darklabs.location.R
 import com.darklabs.location.util.defaultLocation
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.MapUiSettings
+import com.darklabs.location.util.getMarkerIconFromDrawable
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
@@ -40,4 +47,69 @@ fun MapComponent(modifier: Modifier = Modifier, viewModel: TrackingViewModel) {
             myLocationButtonEnabled = true
         )
     )
+}
+
+
+@Composable
+private fun Map(
+    modifier: Modifier = Modifier,
+    mapProperties: MapProperties = MapProperties(),
+    uiSettings: MapUiSettings = MapUiSettings(),
+    startLatLong: LatLng? = null,
+    currentLatLong: LatLng? = null,
+    route: List<LatLng>? = null,
+    zoomLevel: Float = 15f,
+    onMapLoaded: () -> Unit = {}
+) {
+    val currentCameraPositionState = rememberCameraPositionState()
+
+    LaunchedEffect(currentLatLong) {
+        currentLatLong?.let { safeCurrentLatLong ->
+            currentCameraPositionState.animate(
+                CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.fromLatLngZoom(
+                        safeCurrentLatLong,
+                        zoomLevel
+                    )
+                )
+            )
+        }
+    }
+
+    GoogleMap(
+        modifier = modifier,
+        cameraPositionState = currentCameraPositionState,
+        properties = mapProperties,
+        uiSettings = uiSettings,
+        onMapLoaded = onMapLoaded,
+        googleMapOptionsFactory = {
+            GoogleMapOptions().camera(currentCameraPositionState.position)
+        }) {
+
+        startLatLong?.let {
+            Marker(
+                position = it,
+                title = "My starting position",
+                icon = getMarkerIconFromDrawable(
+                    ContextCompat.getDrawable(
+                        LocalContext.current, R.drawable.ic_location
+                    )?.apply { setTint(Color.GREEN) }!!
+                )
+            )
+        }
+        currentLatLong?.let {
+            Marker(
+                position = it,
+                title = "My current position",
+                icon = getMarkerIconFromDrawable(
+                    ContextCompat.getDrawable(
+                        LocalContext.current, R.drawable.ic_runner
+                    )?.apply { setTint(Color.RED) }!!
+                )
+            )
+        }
+        route?.let {
+            Polyline(points = it, color = androidx.compose.ui.graphics.Color.Blue)
+        }
+    }
 }

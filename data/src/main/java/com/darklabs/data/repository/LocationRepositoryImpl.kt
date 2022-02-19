@@ -1,6 +1,5 @@
 package com.darklabs.data.repository
 
-
 import com.darklabs.data.local.dao.LocationDao
 import com.darklabs.data.local.dao.RunDao
 import com.darklabs.data.local.entity.Location
@@ -10,7 +9,7 @@ import com.darklabs.data.mapper.toUiRun
 import com.darklabs.data.mapper.toUiRunWithLocation
 import com.darklabs.domain.repository.LocationRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import com.darklabs.domain.model.Location as UiLocation
 import com.darklabs.domain.model.Run as UiRun
@@ -40,11 +39,11 @@ internal class LocationRepositoryImpl @Inject constructor(
     }
 
     override fun getLatestLocation(runId: Long): Flow<UiLocation> {
-        return locationDao.getLatestLocation(runId).transform { it.toUiLocation() }
+        return locationDao.getLatestLocation(runId).map { it.toUiLocation() }
     }
 
     override fun getOngoingRunWithLocation(): Flow<UiRunWithLocation?> {
-        return runDao.getOnGoingRunWithLocation().transform { it?.toUiRunWithLocation() }
+        return runDao.getOnGoingRunWithLocation().map { it?.toUiRunWithLocation() }
     }
 
     override suspend fun insertLocation(runId: Long, latitude: Double, longitude: Double) {

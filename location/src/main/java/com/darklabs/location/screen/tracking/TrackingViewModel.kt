@@ -2,13 +2,13 @@ package com.darklabs.location.screen.tracking
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.darklabs.common.dispatcher.CoroutineDispatcherProvider
 import com.darklabs.domain.model.Location
 import com.darklabs.domain.model.RunWithLocation
 import com.darklabs.domain.repository.LocationRepository
 import com.darklabs.location.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,7 +21,8 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class TrackingViewModel @Inject constructor(
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val dispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
     private var _latestLocationFlow = MutableStateFlow(defaultLocation)
@@ -49,7 +50,7 @@ class TrackingViewModel @Inject constructor(
     }
 
     private fun fetchLatestLocation() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             fetchOnGoingRunLocations()
                 .map { listOfLocations -> listOfLocations.last() }
                 .distinctUntilChanged()
@@ -63,7 +64,7 @@ class TrackingViewModel @Inject constructor(
     }
 
     private fun fetchOnGoingRunPath() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             fetchOnGoingRunLocations()
                 .map { locations ->
                     locations.map { location ->

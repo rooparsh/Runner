@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.ExperimentalAnimationApi
-import com.darklabs.location.notification.buildNotification
 import com.darklabs.runner.ui.MainActivity
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.Module
@@ -29,7 +28,7 @@ object NotificationModule {
 
     @Provides
     @ServiceScoped
-    fun provideNotificationManager(@ApplicationContext context: Context) =
+    fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 
@@ -46,7 +45,16 @@ object NotificationModule {
     @Provides
     @ServiceScoped
     fun provideBaseNotificationBuilder(
-        @ApplicationContext context: Context,
+        notificationManager: NotificationManager,
+        @ApplicationContext context: Context
+    ) = com.darklabs.location.manager.notification.NotificationManager(notificationManager, context)
+
+
+    @Provides
+    @ServiceScoped
+    fun providesNotificationBuilder(
+        notificationManager: com.darklabs.location.manager.notification.NotificationManager,
         pendingIntent: PendingIntent
-    ) = buildNotification(context, pendingIntent)
+    ) =
+        notificationManager.buildNotification(pendingIntent)
 }

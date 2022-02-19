@@ -21,7 +21,6 @@ internal fun Run.toUiRun(): UiRun {
     return with(this) {
         UiRun(
             id,
-            img,
             timestamp,
             avgSpeedInKMH,
             distanceInMeters,

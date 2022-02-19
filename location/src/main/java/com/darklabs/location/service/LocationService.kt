@@ -1,21 +1,18 @@
 package com.darklabs.location.service
 
-import android.app.NotificationManager
 import android.content.Intent
 import android.location.Location
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.darklabs.common.dispatcher.CoroutineDispatcherProvider
 import com.darklabs.domain.repository.LocationRepository
-import com.darklabs.location.location.LocationManager
-import com.darklabs.location.notification.NOTIFICATION_ID
-import com.darklabs.location.notification.createNotificationChannel
-import com.darklabs.location.notification.updateNotification
+import com.darklabs.location.manager.location.LocationManager
+import com.darklabs.location.manager.notification.NotificationManager
 import com.darklabs.location.util.Action
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,13 +26,17 @@ import javax.inject.Inject
 class LocationService : LifecycleService() {
 
     @Inject
-    lateinit var notificationManager: NotificationManager
+    lateinit var dispatcherProvider: CoroutineDispatcherProvider
 
     @Inject
     lateinit var locationRepository: LocationRepository
 
     @Inject
     lateinit var locationManager: LocationManager
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
 
     @Inject
     lateinit var notificationBuilder: NotificationCompat.Builder
@@ -51,7 +52,7 @@ class LocationService : LifecycleService() {
     }
 
     private fun observeLocationUpdates() {
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(dispatcherProvider.io) {
             locationManager.locationFlow().collect {
                 if (isTracking) {
                     addPathPoint(it)
@@ -64,11 +65,11 @@ class LocationService : LifecycleService() {
         updateTrackingLocation(true)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel(notificationManager)
+            notificationManager.createNotificationChannel()
         }
 
         startForeground(
-            NOTIFICATION_ID,
+            NotificationManager.NOTIFICATION_ID,
             notificationBuilder.build()
         )
     }
@@ -126,19 +127,19 @@ class LocationService : LifecycleService() {
     }
 
     private fun updateRunStatus(isRunning: Boolean) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(dispatcherProvider.io) {
             locationRepository.updateRunStatus(runId, isRunning)
         }
     }
 
     private fun updateNotification(isRunning: Boolean) {
-        notificationBuilder.updateNotification(this, isRunning)
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+        notificationManager.updateNotification(notificationBuilder, this, isRunning)
+        notificationManager.notify(notificationBuilder)
     }
 
     private fun startTimer() {
-        CoroutineScope(Dispatchers.Main).launch {
-            while (isTracking){
+        CoroutineScope(dispatcherProvider.main).launch {
+            while (isTracking) {
 
             }
         }
