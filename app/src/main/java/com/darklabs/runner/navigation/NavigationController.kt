@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.darklabs.location.navigation.TrackingCommand
+import com.darklabs.location.navigation.LocationNavigation
+import com.darklabs.location.permissionHandler.LocationPermissionController
 import com.darklabs.location.screen.tracking.TrackingScreen
 import com.darklabs.navigation.NavigationManager
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -34,9 +35,15 @@ fun NavigationController(
 
         AnimatedNavHost(
             navController = navController,
-            startDestination = TrackingCommand.destination
+            startDestination = LocationNavigation.LocationPermissionCommand.destination
         ) {
-            composable(TrackingCommand.destination) {
+            composable(LocationNavigation.LocationPermissionCommand.destination) {
+                LocationPermissionController(onPermissionGranted = {
+                    navigationManager.navigate(LocationNavigation.TrackingCommand)
+                })
+            }
+
+            composable(LocationNavigation.TrackingCommand.destination) {
                 TrackingScreen(viewModel = hiltViewModel())
             }
         }

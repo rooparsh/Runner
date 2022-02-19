@@ -42,8 +42,8 @@ dependencies {
 
     implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
     
-    implementation("com.google.dagger:hilt-android:2.40.5")
-    kapt("com.google.dagger:hilt-compiler:2.40.5")
+    implementation("com.google.dagger:hilt-android:2.41")
+    kapt("com.google.dagger:hilt-compiler:2.41")
 
     implementation("androidx.room:room-runtime:2.4.1")
     implementation("androidx.room:room-ktx:2.4.1")

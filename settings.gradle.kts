@@ -12,6 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+enableFeaturePreview("VERSION_CATALOGS")
 rootProject.name = "runner"
 include(":app")
 include(":location")
@@ -19,3 +20,4 @@ include(":common")
 include(":data")
 include(":domain")
 include(":navigation")
+include(":common-ui")

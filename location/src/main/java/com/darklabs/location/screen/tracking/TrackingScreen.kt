@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.darklabs.common.permission.LocationPermissionController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
@@ -17,18 +15,17 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
-@ExperimentalPermissionsApi
 @Composable
 fun TrackingScreen(viewModel: TrackingViewModel) {
     Column(modifier = Modifier.fillMaxSize()) {
-        LocationPermissionController {
-            MapComponent(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                viewModel = viewModel
-            )
-        }
+
+        MapComponent(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            viewModel = viewModel
+        )
+
         TrackingControls(
             modifier = Modifier
                 .weight(1f)

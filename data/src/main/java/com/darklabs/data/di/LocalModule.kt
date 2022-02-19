@@ -1,7 +1,7 @@
 package com.darklabs.data.di
 
 import android.content.Context
-import com.darklabs.data.local.DatabaseHelper
+import com.darklabs.storage.local.DatabaseHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

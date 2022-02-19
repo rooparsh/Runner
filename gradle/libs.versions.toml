@@ -1,0 +1,6 @@
+[versions]
+kotlin_version = "1.6.10"
+gradle_version = "7.1.1"
+
+
+[libraries]

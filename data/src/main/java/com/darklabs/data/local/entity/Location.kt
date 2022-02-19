@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
             onDelete = CASCADE
         )]
 )
-internal data class Location(
+data class Location(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
     var runId: Long = 0L,
