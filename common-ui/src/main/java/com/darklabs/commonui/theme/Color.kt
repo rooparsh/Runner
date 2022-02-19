@@ -1,4 +1,4 @@
-package com.darklabs.runner.ui.theme
+package com.darklabs.commonui.theme
 
 import androidx.compose.ui.graphics.Color
 

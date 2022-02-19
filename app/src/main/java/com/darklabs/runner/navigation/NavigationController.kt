@@ -13,13 +13,11 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Created by Rooparsh Kalia on 06/02/22
  */
 
-@ExperimentalCoroutinesApi
 @ExperimentalPermissionsApi
 @ExperimentalAnimationApi
 @Composable

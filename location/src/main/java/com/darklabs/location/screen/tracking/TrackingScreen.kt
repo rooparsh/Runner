@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Created by Rooparsh Kalia on 12/02/22
  */
 
 
-@ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @Composable
 fun TrackingScreen(viewModel: TrackingViewModel) {

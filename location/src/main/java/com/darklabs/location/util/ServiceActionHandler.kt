@@ -3,7 +3,6 @@ package com.darklabs.location.util
 import android.content.Context
 import android.content.Intent
 import com.darklabs.location.service.LocationService
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Created by Rooparsh Kalia on 04/02/22
@@ -21,7 +20,6 @@ enum class Action(val stringAction: String) {
     }
 }
 
-@ExperimentalCoroutinesApi
 fun Context.sendCommandToService(action: Action) {
     Intent(this, LocationService::class.java).also {
         it.action = action.stringAction

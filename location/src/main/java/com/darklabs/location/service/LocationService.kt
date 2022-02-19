@@ -13,7 +13,6 @@ import com.darklabs.location.manager.notification.NotificationManager
 import com.darklabs.location.util.Action
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ import javax.inject.Inject
  * Created by Rooparsh Kalia on 04/02/22
  */
 
-@ExperimentalCoroutinesApi
+
 @AndroidEntryPoint
 class LocationService : LifecycleService() {
 

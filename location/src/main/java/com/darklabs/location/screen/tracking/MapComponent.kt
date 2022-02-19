@@ -17,14 +17,12 @@ import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Created by Rooparsh Kalia on 12/02/22
  */
 
 
-@ExperimentalCoroutinesApi
 @ExperimentalAnimationApi
 @Composable
 fun MapComponent(modifier: Modifier = Modifier, viewModel: TrackingViewModel) {

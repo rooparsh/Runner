@@ -10,7 +10,6 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -37,7 +36,6 @@ class LocationManager @Inject constructor(
         priority = PRIORITY_HIGH_ACCURACY
     }
 
-    @ExperimentalCoroutinesApi
     @SuppressLint("MissingPermission")
     private val _locationUpdates = callbackFlow {
         val callback = object : LocationCallback() {
@@ -72,6 +70,5 @@ class LocationManager @Inject constructor(
         return currentLocation
     }
 
-    @ExperimentalCoroutinesApi
     fun locationFlow(): Flow<Location> = _locationUpdates
 }

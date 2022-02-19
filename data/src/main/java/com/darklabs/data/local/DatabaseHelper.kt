@@ -1,15 +1,16 @@
-package com.darklabs.storage.local
+package com.darklabs.data.local
+
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.darklabs.storage.local.conveter.BitmapConverter
-import com.darklabs.storage.local.dao.LocationDao
-import com.darklabs.storage.local.dao.RunDao
-import com.darklabs.storage.local.entity.Location
-import com.darklabs.storage.local.entity.Run
+import com.darklabs.data.local.conveter.BitmapConverter
+import com.darklabs.data.local.dao.LocationDao
+import com.darklabs.data.local.dao.RunDao
+import com.darklabs.data.local.entity.Location
+import com.darklabs.data.local.entity.Run
 
 /**
  * Created by Rooparsh Kalia on 31/01/22

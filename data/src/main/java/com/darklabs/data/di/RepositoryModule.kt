@@ -2,8 +2,8 @@ package com.darklabs.data.di
 
 import com.darklabs.data.repository.LocationRepositoryImpl
 import com.darklabs.domain.repository.LocationRepository
-import com.darklabs.storage.local.dao.LocationDao
-import com.darklabs.storage.local.dao.RunDao
+import com.darklabs.data.local.dao.LocationDao
+import com.darklabs.data.local.dao.RunDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

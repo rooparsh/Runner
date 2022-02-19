@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import com.darklabs.location.R
 import com.darklabs.location.service.LocationService
 import com.darklabs.location.util.Action
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 /**
@@ -39,7 +38,7 @@ class NotificationManager @Inject constructor(
         notificationManager.createNotificationChannel(channel)
     }
 
-    @ExperimentalCoroutinesApi
+
     fun buildNotification(pendingIntent: PendingIntent) =
         NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_runner)
@@ -54,7 +53,7 @@ class NotificationManager @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_MAX)
 
 
-    @ExperimentalCoroutinesApi
+
     fun updateNotification(
         builder: NotificationCompat.Builder,
         context: Context,
@@ -67,7 +66,6 @@ class NotificationManager @Inject constructor(
             context.getPendingIntent(isActive)
         )
 
-    @ExperimentalCoroutinesApi
     private fun Context.getPendingIntent(isActive: Boolean): PendingIntent {
         return if (isActive) {
             val pauseIntent = Intent(this, LocationService::class.java)

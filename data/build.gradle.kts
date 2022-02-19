@@ -13,8 +13,9 @@ android {
         targetSdk = 32
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -41,7 +42,7 @@ dependencies {
     implementation(project(":domain"))
 
     implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
-    
+
     implementation("com.google.dagger:hilt-android:2.41")
     kapt("com.google.dagger:hilt-compiler:2.41")
 

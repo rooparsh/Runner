@@ -9,7 +9,6 @@ import com.darklabs.domain.repository.LocationRepository
 import com.darklabs.location.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +17,6 @@ import javax.inject.Inject
  * Created by Rooparsh Kalia on 05/02/22
  */
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
 class TrackingViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
