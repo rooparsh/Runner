@@ -51,19 +51,19 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":common-ui"))
 
-    implementation("com.google.dagger:hilt-android:2.40.5")
-    kapt("com.google.dagger:hilt-compiler:2.40.5")
+    implementation("com.google.dagger:hilt-android:2.41")
+    kapt("com.google.dagger:hilt-compiler:2.41")
 
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.compose.ui:ui:1.2.0-alpha02")
-    implementation("androidx.compose.material:material:1.2.0-alpha02")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-alpha02")
+    implementation("androidx.compose.ui:ui:1.2.0-alpha03")
+    implementation("androidx.compose.material:material:1.2.0-alpha03")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.2.0-alpha03")
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha01")
-    implementation("androidx.lifecycle:lifecycle-service:2.5.0-alpha01")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha02")
+    implementation("androidx.lifecycle:lifecycle-service:2.5.0-alpha02")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha02")
 
-    api("com.google.maps.android:maps-compose:1.0.0")
+    api("com.google.maps.android:maps-compose:1.2.0")
     api("com.google.android.gms:play-services-maps:18.0.2")
     api("com.google.android.gms:play-services-location:19.0.1")
 
@@ -72,7 +72,7 @@ dependencies {
 
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.0-alpha02")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.0-alpha03")
 
-    debugImplementation("androidx.compose.ui:ui-tooling:1.2.0-alpha02")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.2.0-alpha03")
 }

@@ -43,9 +43,9 @@ android {
 dependencies {
 
 
-    api("androidx.navigation:navigation-compose:2.5.0-alpha01")
+    api("androidx.navigation:navigation-compose:2.5.0-alpha02")
 
-    api("com.google.accompanist:accompanist-navigation-animation:0.24.1-alpha")
+    api("com.google.accompanist:accompanist-navigation-animation:0.24.2-alpha")
 
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")

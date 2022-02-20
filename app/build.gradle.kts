@@ -67,7 +67,7 @@ dependencies {
 
 
     implementation("androidx.core:core-splashscreen:1.0.0-beta01")
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:1.5.0-alpha02")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0-alpha02")
 
