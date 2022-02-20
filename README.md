@@ -12,6 +12,12 @@
     </a>
 </div>
 
+<div align="right">
+    <a href = "https://github.com/rooparsh/Runner/actions/workflows/detekt-analysis.yml">
+        <img src = "https://github.com/rooparsh/Runner/actions/workflows/detekt-analysis.yml/badge.svg" />
+    </a>
+</div>
+
 <br>
 ### Status: 🚧 In progress 🚧
 
