@@ -5,8 +5,14 @@
         <img src = "https://img.shields.io/badge/Jetpack%20Compose-1.1.0-brightgreen" />
     </a>
 </div>
-<br>
 
+<div align="center">
+    <a href = "https://github.com/rooparsh/Runner/actions/workflows/build.yml">
+        <img src = "https://github.com/rooparsh/Runner/actions/workflows/build.yml/badge.svg" />
+    </a>
+</div>
+
+<br>
 ### Status: 🚧 In progress 🚧
 
 # Requirements
