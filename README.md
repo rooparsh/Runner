@@ -1,25 +1,21 @@
 # Fitness tracking App
 
-<div align="left">
     <a href = "https://developer.android.com/jetpack/androidx/versions/all-channel#february_11_2022">
         <img src = "https://img.shields.io/badge/Jetpack%20Compose-1.1.0-brightgreen" />
     </a>
-</div>
 
-<div align="center">
     <a href = "https://github.com/rooparsh/Runner/actions/workflows/build.yml">
         <img src = "https://github.com/rooparsh/Runner/actions/workflows/build.yml/badge.svg" />
     </a>
-</div>
 
-<div align="right">
     <a href = "https://github.com/rooparsh/Runner/actions/workflows/detekt-analysis.yml">
         <img src = "https://github.com/rooparsh/Runner/actions/workflows/detekt-analysis.yml/badge.svg" />
     </a>
-</div>
+
 
 <br>
-### Status: 🚧 In progress 🚧
+
+## Status: 🚧 In progress 🚧
 
 # Requirements
 1. Android Studio 2021.1.1 (min)

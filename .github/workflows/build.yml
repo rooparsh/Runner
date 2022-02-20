@@ -16,6 +16,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: GET ENV KEYS
+        env:
+          MAPS_API_KEY: $
+        run: echo MAPS_API_KEY=\"MAPS_API_KEY\" > ./local.properties
       - name: Build APK
         run: bash ./gradlew assembleRelease --stacktrace
       - name: Upload APK
