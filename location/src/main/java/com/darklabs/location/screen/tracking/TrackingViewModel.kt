@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.darklabs.common.dispatcher.CoroutineDispatcherProvider
 import com.darklabs.domain.model.Location
 import com.darklabs.domain.model.RunWithLocation
-import com.darklabs.domain.repository.LocationRepository
+import com.darklabs.domain.usecase.GetOngoingRunWithLocationUseCase
 import com.darklabs.location.util.defaultLocation
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrackingViewModel @Inject constructor(
-    private val locationRepository: LocationRepository,
+    private val fetchOnGoingRun: GetOngoingRunWithLocationUseCase,
     private val dispatcherProvider: CoroutineDispatcherProvider
 ) : ViewModel() {
 
@@ -36,8 +36,8 @@ class TrackingViewModel @Inject constructor(
     }
 
     private fun fetchOnGoingRun(): Flow<RunWithLocation> {
-        return locationRepository
-            .getOngoingRunWithLocation()
+        return fetchOnGoingRun
+            .perform()
             .filterNotNull()
     }
 
