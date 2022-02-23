@@ -37,7 +37,7 @@ class TrackingViewModel @Inject constructor(
 
     private fun fetchOnGoingRun(): Flow<RunWithLocation> {
         return fetchOnGoingRun
-            .perform()
+            .observe()
             .filterNotNull()
     }
 

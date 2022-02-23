@@ -9,11 +9,10 @@ import javax.inject.Inject
  * Created by Rooparsh Kalia on 22/02/22
  */
 
-class GetOngoingRunWithLocationUseCase
-@Inject constructor(private val locationRepository: LocationRepository) :
-    BaseUseCase<Unit, Flow<RunWithLocation?>> {
+class GetOngoingRunWithLocationUseCase @Inject constructor(private val locationRepository: LocationRepository) :
+    BaseUseCase<Unit, RunWithLocation?> {
 
-    override fun perform(): Flow<RunWithLocation?> {
+    override fun observe(): Flow<RunWithLocation?> {
         return locationRepository.getOngoingRunWithLocation()
     }
 }

@@ -46,10 +46,10 @@ internal class LocationRepositoryImpl @Inject constructor(
         return runDao.getOnGoingRunWithLocation().map { it?.toUiRunWithLocation() }
     }
 
-    override suspend fun insertLocation(runId: Long, latitude: Double, longitude: Double) {
+    override suspend fun insertLocation(runId: Long, latitude: Double, longitude: Double): Long {
         val currentTimeInMillis = System.currentTimeMillis()
 
-        locationDao.insertLocation(
+        return locationDao.insertLocation(
             Location(
                 runId = runId,
                 timestamp = currentTimeInMillis,

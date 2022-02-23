@@ -15,7 +15,7 @@ interface LocationRepository {
     suspend fun getOngoingRun(): Run?
     fun getLatestLocation(runId: Long): Flow<Location>
     fun getOngoingRunWithLocation(): Flow<RunWithLocation?>
-    suspend fun insertLocation(runId: Long, latitude: Double, longitude: Double)
+    suspend fun insertLocation(runId: Long, latitude: Double, longitude: Double): Long
 }
 
 

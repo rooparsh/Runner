@@ -7,7 +7,10 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.darklabs.common.dispatcher.CoroutineDispatcherProvider
-import com.darklabs.domain.repository.LocationRepository
+import com.darklabs.domain.model.request.UpdateRun
+import com.darklabs.domain.usecase.InsertLocationUseCase
+import com.darklabs.domain.usecase.InsertRunUseCase
+import com.darklabs.domain.usecase.UpdateRunUseCase
 import com.darklabs.location.manager.location.LocationManager
 import com.darklabs.location.manager.notification.NotificationManager
 import com.darklabs.location.util.Action
@@ -28,9 +31,6 @@ class LocationService : LifecycleService() {
     lateinit var dispatcherProvider: CoroutineDispatcherProvider
 
     @Inject
-    lateinit var locationRepository: LocationRepository
-
-    @Inject
     lateinit var locationManager: LocationManager
 
     @Inject
@@ -39,6 +39,15 @@ class LocationService : LifecycleService() {
 
     @Inject
     lateinit var notificationBuilder: NotificationCompat.Builder
+
+    @Inject
+    lateinit var updateRunUseCase: UpdateRunUseCase
+
+    @Inject
+    lateinit var insertRunUseCase: InsertRunUseCase
+
+    @Inject
+    lateinit var insertLocationUseCase: InsertLocationUseCase
 
     private var isFirstRun = true
     private var isTracking = false
@@ -74,7 +83,13 @@ class LocationService : LifecycleService() {
     }
 
     private suspend fun addPathPoint(location: Location) {
-        locationRepository.insertLocation(runId, location.latitude, location.longitude)
+        insertLocationUseCase.perform(
+            com.darklabs.domain.model.Location(
+                id = runId,
+                latitude = location.latitude,
+                longitude = location.longitude
+            )
+        )
     }
 
 
@@ -117,7 +132,7 @@ class LocationService : LifecycleService() {
 
     private fun createRunInDB() {
         lifecycleScope.launch {
-            runId = locationRepository.createRun()
+            runId = insertRunUseCase.perform()
         }
     }
 
@@ -127,7 +142,7 @@ class LocationService : LifecycleService() {
 
     private fun updateRunStatus(isRunning: Boolean) {
         lifecycleScope.launch(dispatcherProvider.io) {
-            locationRepository.updateRunStatus(runId, isRunning)
+            updateRunUseCase.perform(UpdateRun(runId, isRunning))
         }
     }
 
