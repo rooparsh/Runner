@@ -1,11 +1,9 @@
 package com.darklabs.location.screen.tracking
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -30,6 +28,7 @@ fun MapComponent(modifier: Modifier = Modifier, viewModel: TrackingViewModel) {
     val currentLocation by viewModel.currentLocationFlow.collectAsState(initial = defaultLocation)
     val path by viewModel.pathFlow.collectAsState(initial = null)
 
+    val mapImage: MutableState<Bitmap?> = remember { mutableStateOf(null) }
     Map(
         modifier = modifier,
         startLatLong = path?.firstOrNull(),
@@ -83,6 +82,7 @@ private fun Map(
         googleMapOptionsFactory = {
             GoogleMapOptions().camera(currentCameraPositionState.position)
         }) {
+
 
         startLatLong?.let {
             Marker(
